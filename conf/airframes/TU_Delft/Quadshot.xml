@@ -249,7 +249,12 @@
 <!--      <define name="BOOZ_START_DELAY" value="1"/> -->
       <subsystem name="radio_control" type="spektrum"/>
       <subsystem name="actuators"     type="pwm_supervision"/>
-      <subsystem name="telemetry"     type="transparent"/>
+      <subsystem name="telemetry"     type="xbee_api">
+	 <configure name="MODEM_PORT"      value="UART2"/>
+	 <configure name="MODEM_BAUD"              value="B57600"/>
+      </subsystem>
+
+      
       <define name="SERVO_HZ" value="400"/>
       <define name="SERVO_HZ_SECONDARY" value="40"/>
       <define name="RADIO_MODE" value="RADIO_FLAP"/>
