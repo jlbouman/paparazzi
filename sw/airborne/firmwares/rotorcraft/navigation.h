@@ -156,7 +156,7 @@ bool_t nav_approaching_from(uint8_t wp_idx, uint8_t from_idx);
 /** Set the vertical mode to fixed throttle with the specified setpoint */
 #define NavVerticalThrottleMode(_throttle) { \
   vertical_mode = VERTICAL_MODE_MANUAL; \
-  nav_throttle = (200 * ((uint32_t)_throttle) / 9600); \
+  nav_throttle = (200 * ((uint32_t)_throttle) / PPRZ_MAX); \
 }
 
 #define NavHeading(_course) {}
