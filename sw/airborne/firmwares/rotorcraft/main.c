@@ -176,6 +176,8 @@ STATIC_INLINE void main_periodic( void ) {
 
 STATIC_INLINE void main_event( void ) {
 
+  i2c_event();
+
   DatalinkEvent();
 
   if (autopilot_rc) {
