@@ -1,6 +1,6 @@
 #include "std.h"
 #include "mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "led.h"
 #include "interrupt_hw.h"
 #include "mcu_periph/usb_serial.h"
@@ -8,7 +8,7 @@
 #include "mcu_arch.h"
 
 #include "messages.h"
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 
 #include "armVIC.h"
 
@@ -26,7 +26,7 @@ static float omega_rad;
 int main( void ) {
   main_init();
   while(1) {
-    if (sys_time_periodic())
+    if (sys_time_check_and_ack_timer(0))
       main_periodic();
     main_event();
   }
@@ -35,7 +35,7 @@ int main( void ) {
 
 static inline void main_init( void ) {
   mcu_init();
-  sys_time_init();
+  sys_time_register_timer(PERIODIC_TASK_PERIOD, NULL);
   main_init_tacho();
   mcu_int_enable();
 }
@@ -76,7 +76,7 @@ static inline void main_init_tacho(void) {
 
 
 //
-//  trimed version of arm7/sys_time_hw.c
+//  trimed version of arm7/mcu_periph/sys_time.hw.c
 //
 
 uint32_t cpu_time_ticks;

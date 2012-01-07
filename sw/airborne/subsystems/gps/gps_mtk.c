@@ -37,7 +37,7 @@
 
 #include "subsystems/nav.h"
 #include "math/pprz_geodetic_float.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 
 #define MTK_DIY_OUTPUT_RATE	MTK_DIY_OUTPUT_4HZ
 #define OUTPUT_RATE			4
@@ -386,6 +386,8 @@ static bool_t user_gps_configure(bool_t cpt) {
   case 1:
     MtkSend_CFG(MTK_DIY_OUTPUT_RATE);
     return FALSE;
+  default:
+    break;
   }
   return TRUE; /* Continue, except for the last case */
 }

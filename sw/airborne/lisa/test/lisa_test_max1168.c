@@ -30,8 +30,8 @@
 
 #include BOARD_CONFIG
 #include "mcu.h"
-#include "sys_time.h"
-#include "downlink.h"
+#include "mcu_periph/sys_time.h"
+#include "subsystems/datalink/downlink.h"
 #include "peripherals/max1168.h"
 
 static inline void main_init( void );

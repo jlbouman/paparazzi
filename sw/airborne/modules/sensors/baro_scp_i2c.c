@@ -7,13 +7,13 @@
 
 #include "baro_scp_i2c.h"
 
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "mcu_periph/i2c.h"
 #include "led.h"
 
 #include "mcu_periph/uart.h"
 #include "messages.h"
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 
 #ifndef SENSOR_SYNC_SEND
 #warning set SENSOR_SYNC_SEND to use baro_scp_i2c

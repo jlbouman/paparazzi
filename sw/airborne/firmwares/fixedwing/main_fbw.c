@@ -35,7 +35,7 @@
 
 #include "firmwares/fixedwing/main_fbw.h"
 #include "mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "commands.h"
 #include "firmwares/fixedwing/actuators.h"
 #include "subsystems/electrical.h"
@@ -61,7 +61,9 @@ volatile uint8_t fbw_new_actuators = 0;
 void init_fbw( void ) {
 
   mcu_init();
-  sys_time_init();
+
+  sys_time_register_timer(SYS_TIME_TIMER_S(1./PERIODIC_FREQUENCY), NULL);
+
   electrical_init();
 
 #ifdef ACTUATORS
@@ -152,10 +154,10 @@ void event_task_fbw( void) {
     for(i = 0; i < COMMANDS_NB; i++) trimmed_commands[i] = commands[i];
 
     #ifdef COMMAND_ROLL
-    trimmed_commands[COMMAND_ROLL] += command_roll_trim;
+    trimmed_commands[COMMAND_ROLL] += ChopAbs(command_roll_trim, MAX_PPRZ/10);
     #endif
     #ifdef COMMAND_PITCH
-    trimmed_commands[COMMAND_PITCH] += command_pitch_trim;
+    trimmed_commands[COMMAND_PITCH] += ChopAbs(command_pitch_trim, MAX_PPRZ/10);
     #endif
 
     SetActuatorsFromCommands(trimmed_commands);

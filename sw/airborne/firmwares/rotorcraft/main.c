@@ -26,14 +26,14 @@
 
 #include <inttypes.h>
 #include "mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "led.h"
 
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 #include "firmwares/rotorcraft/telemetry.h"
-#include "datalink.h"
+#include "subsystems/datalink/datalink.h"
 #include "subsystems/settings.h"
-#include "xbee.h"
+#include "subsystems/datalink/xbee.h"
 
 #include "firmwares/rotorcraft/commands.h"
 #include "firmwares/rotorcraft/actuators.h"
@@ -75,7 +75,7 @@ int main( void ) {
   main_init();
 
   while(1) {
-    if (sys_time_periodic())
+    if (sys_time_check_and_ack_timer(0))
       main_periodic();
     main_event();
   }
@@ -85,18 +85,10 @@ int main( void ) {
 
 STATIC_INLINE void main_init( void ) {
 
-#ifndef NO_FUCKING_STARTUP_DELAY
-#ifndef RADIO_CONTROL_SPEKTRUM_PRIMARY_PORT
-  /* IF THIS IS NEEDED SOME PERHIPHERAL THEN PLEASE MOVE IT THERE */
-  for (uint32_t startup_counter=0; startup_counter<2000000; startup_counter++){
-    __asm("nop");
-  }
-#endif
-#endif
-
   mcu_init();
 
-  sys_time_init();
+  sys_time_register_timer(SYS_TIME_TIMER_S(1./PERIODIC_FREQUENCY), NULL);
+
   electrical_init();
 
   actuators_init();

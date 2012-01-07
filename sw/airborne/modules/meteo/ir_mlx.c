@@ -31,12 +31,12 @@
 
 #include "modules/meteo/ir_mlx.h"
 
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "mcu_periph/i2c.h"
 #include "led.h"
 #include "mcu_periph/uart.h"
 #include "messages.h"
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 
 #ifndef DOWNLINK_DEVICE
 #define DOWNLINK_DEVICE DOWNLINK_AP_DEVICE

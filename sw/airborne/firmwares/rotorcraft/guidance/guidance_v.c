@@ -192,8 +192,12 @@ void guidance_v_run(bool_t in_flight) {
 #endif
     gv_update_ref_from_zd_sp(guidance_v_zd_sp);
     run_hover_loop(in_flight);
+#if NO_RC_THRUST_LIMIT
+    stabilization_cmd[COMMAND_THRUST] = guidance_v_delta_t;
+#else
     // saturate max authority with RC stick
     stabilization_cmd[COMMAND_THRUST] = Min( guidance_v_rc_delta_t, guidance_v_delta_t);
+#endif
     break;
 
   case GUIDANCE_V_MODE_HOVER:
@@ -203,8 +207,12 @@ void guidance_v_run(bool_t in_flight) {
 #endif
     gv_update_ref_from_z_sp(guidance_v_z_sp);
     run_hover_loop(in_flight);
+#if NO_RC_THRUST_LIMIT
+    stabilization_cmd[COMMAND_THRUST] = guidance_v_delta_t;
+#else
     // saturate max authority with RC stick
     stabilization_cmd[COMMAND_THRUST] = Min( guidance_v_rc_delta_t, guidance_v_delta_t);
+#endif
     break;
 
   case GUIDANCE_V_MODE_NAV:
@@ -224,11 +232,15 @@ void guidance_v_run(bool_t in_flight) {
         guidance_v_z_sp = -nav_flight_altitude; // For display only
         guidance_v_delta_t = nav_throttle;
       }
+#if NO_RC_THRUST_LIMIT
+      stabilization_cmd[COMMAND_THRUST] = guidance_v_delta_t;
+#else
       /* use rc limitation if available */
       if (radio_control.status == RC_OK)
         stabilization_cmd[COMMAND_THRUST] = Min( guidance_v_rc_delta_t, guidance_v_delta_t);
       else
         stabilization_cmd[COMMAND_THRUST] = guidance_v_delta_t;
+#endif
       break;
     }
   default:

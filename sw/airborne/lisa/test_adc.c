@@ -27,11 +27,11 @@
 
 #include BOARD_CONFIG
 #include "mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "led.h"
 #include "mcu_periph/adc.h"
 #include "mcu_periph/uart.h"
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 
 int main_periodic(void);
 static inline void main_init( void );

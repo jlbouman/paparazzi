@@ -38,8 +38,8 @@
 #include "mcu.h"
 #include "mcu_periph/uart.h"
 #include "mcu_periph/i2c.h"
-#include "sys_time.h"
-#include "downlink.h"
+#include "mcu_periph/sys_time.h"
+#include "subsystems/datalink/downlink.h"
 #include "std.h"
 #include "math/pprz_algebra_int.h"
 

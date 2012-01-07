@@ -25,11 +25,11 @@
 
 #include "std.h"
 #include "mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "led.h"
 #include "mcu_periph/uart.h"
 #include "messages.h"
-#include "downlink.h"
+#include "subsystems/datalink/downlink.h"
 
 #include "subsystems/imu.h"
 #include "subsystems/ahrs.h"
@@ -173,7 +173,7 @@ static inline void main_report(void) {
 #endif
 		       },
 		       {
-			 DOWNLINK_SEND_BOOZ2_AHRS_EULER(DefaultChannel,
+			 DOWNLINK_SEND_AHRS_EULER_INT(DefaultChannel,
 							&ahrs.ltp_to_imu_euler.phi,
 							&ahrs.ltp_to_imu_euler.theta,
 							&ahrs.ltp_to_imu_euler.psi,
@@ -182,7 +182,7 @@ static inline void main_report(void) {
 							&ahrs.ltp_to_body_euler.psi);
 		       },
 		       {
-			 DOWNLINK_SEND_BOOZ_AHRS_BIAS(DefaultChannel,
+			 DOWNLINK_SEND_AHRS_GYRO_BIAS_INT(DefaultChannel,
 						      &ahrs_impl.gyro_bias.p,
 						      &ahrs_impl.gyro_bias.q,
 						      &ahrs_impl.gyro_bias.r);

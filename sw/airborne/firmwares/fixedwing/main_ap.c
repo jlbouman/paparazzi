@@ -39,18 +39,17 @@
 #include "firmwares/fixedwing/stabilization/stabilization_attitude.h"
 #include "firmwares/fixedwing/guidance/guidance_v.h"
 #include "subsystems/gps.h"
-#include "gyro.h"
 #include "ap_downlink.h"
 #include "subsystems/nav.h"
 #include "firmwares/fixedwing/autopilot.h"
 #include "estimator.h"
 #include "generated/settings.h"
 #include "link_mcu.h"
-#include "sys_time.h"
+#include "mcu_periph/sys_time.h"
 #include "generated/flight_plan.h"
-#include "datalink.h"
+#include "subsystems/datalink/datalink.h"
 #include "subsystems/settings.h"
-#include "xbee.h"
+#include "subsystems/datalink/xbee.h"
 
 #include "gpio.h"
 
@@ -392,10 +391,6 @@ static void navigation_task( void ) {
 
 static inline void attitude_loop( void ) {
 
-#ifdef USE_GYRO
-  gyro_update();
-#endif
-
 #ifdef USE_INFRARED
   ahrs_update_infrared();
 #endif /* USE_INFRARED */
@@ -536,13 +531,10 @@ void periodic_task_ap( void ) {
 void init_ap( void ) {
 #ifndef SINGLE_MCU /** init done in main_fbw in single MCU */
   mcu_init();
-  sys_time_init();
+  sys_time_register_timer(SYS_TIME_TIMER_S(1./PERIODIC_FREQUENCY), NULL);
 #endif /* SINGLE_MCU */
 
   /************* Sensors initialization ***************/
-#ifdef USE_GYRO
-  gyro_init();
-#endif
 #ifdef USE_GPS
   gps_init();
 #endif
@@ -567,8 +559,8 @@ void init_ap( void ) {
 #if defined MCU_SPI_LINK
   link_mcu_init();
 #endif
-#ifdef MODEM
-  modem_init();
+#if USE_AUDIO_TELEMETRY
+  audio_telemetry_init();
 #endif
 
   /************ Internal status ***************/
@@ -662,9 +654,7 @@ void event_task_ap( void ) {
 #ifdef USE_GPS
 static inline void on_gps_solution( void ) {
   estimator_update_state_gps();
-#ifdef USE_INFRARED
   ahrs_update_gps();
-#endif
 #ifdef GPS_TRIGGERED_FUNCTION
   GPS_TRIGGERED_FUNCTION();
 #endif
